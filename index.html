@@ -35,6 +35,38 @@
   </div>
 
 <script>
+    // items is the white div that surrounds all the items.
+    const slider = document.querySelector('.items');
+    // we're not assigning values to the variables yet, we're just declaring them. That'll happen in our events. 
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.classList.add('active');
+        // offSetLeft is the distance from the left edge of the viewport to the left edge of the element.
+        startX = e.pageX - slider.offsetLeft;
+        // scrollLeft is the number of pixels that an element's content is scrolled to the left.
+        scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+    // we need to know where the mouse is when it's clicked down, and where it is when it's released (anchor points). This is where we'll use the startX variable.
+    slider.addEventListener('mousemove', (e) => {
+        if(!isDown) return; // stop the function from running
+        e.preventDefault(); // this will stop the text from being selected when we drag.
+        const x = e.pageX - slider.offsetLeft; //this is the same code we used above where it records the initial position of the mouse when it's clicked down. Here we're recalculating it every time we move the mouse. 
+        const walk = (x - startX) * 3; // this is the distance we're moving the mouse. We're multiplying it by 3 to make it move faster.
+        slider.scrollLeft = scrollLeft - walk; // this is the actual scrolling. We're subtracting the walk from the scrollLeft to make it scroll in the opposite direction.
+    });
+
 </script>
 
   </body>
